@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Supplier {
+  id                       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  supplierSlug             String    @unique
+  email                    String
+  contactNumber            String
+  address                  String
+  nic                      String
+  businessRegisteredNumber String
+  products                 Product[]
+}
+
+model Category {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productSlug String   @unique
+  name        String
+  description String
+  unitPrice   Float
+  quantity    Int
+  categoryId  String   @db.ObjectId // Foreign key for Category
+  category    Category @relation(fields: [categoryId], references: [id]) // One-to-many relationship with Category
+  supplierId  String   @db.ObjectId // Foreign key for Supplier
+  supplier    Supplier @relation(fields: [supplierId], references: [id]) // One-to-many relationship with Supplier
+}
+
+model Order {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderSlug       String   @unique
+  customerName    String
+  shippingAddress String
+  paymentMethod   String   @default("cash") // card and cod
+  contactNumber   String
+  status          String   @default("Pending")
+  products        Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  email         String   @unique
+  password      String
+  name          String
+  nic           String   @unique
+  workStartDate DateTime
+  contactNumber String?
+  role          String   @default("manager")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
