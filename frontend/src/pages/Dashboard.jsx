@@ -15,6 +15,7 @@ import SupplierManagement from "../components/SupplierManagement";
 import OrderManagement from "../components/OrderManagement";
 import ProductManagement from "../components/ProductManagement";
 import { useNavigate } from "react-router-dom";
+import FutureSalesManagement from "../components/Predictions";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -134,6 +135,14 @@ const Dashboard = () => {
       },
     },
     {
+      key: "predicitions",
+      label: "Future Sales Management",
+      icon: <ShoppingOutlined />,
+      onClick: () => {
+        setActiveIndex(6);
+      },
+    },
+    {
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Logout",
@@ -243,6 +252,7 @@ const Dashboard = () => {
         {activeIndex === 3 && <CategoryManagement />}
         {activeIndex === 4 && <ProductManagement />}
         {activeIndex === 5 && <OrderManagement />}
+        {activeIndex === 6 && <FutureSalesManagement />}
       </Layout>
     </Layout>
   );
