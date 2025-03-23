@@ -238,7 +238,13 @@ const CategoryManagement = () => {
             <Form.Item
               name="name"
               label="Name"
-              rules={[{ required: true, message: "Please input the name!" }]}
+              rules={[
+                { required: true, message: "Please input the name!" },
+                {
+                  pattern: /^[A-Za-z\s]+$/,
+                  message: "Name can only contain letters and spaces!",
+                },
+              ]}
             >
               <Input />
             </Form.Item>

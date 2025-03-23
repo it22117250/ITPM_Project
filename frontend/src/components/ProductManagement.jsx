@@ -235,179 +235,189 @@ const ProductManagement = () => {
   ];
 
   return (
-  <>
-    <Header>
-    <h3 style={{ color: "white" }}>Product Management</h3>
-    </Header>
-    <Content style={{ padding: "20px" }}>
-      <Card style={{ marginBottom: 16 }}>
-        <Space
-          style={{
-            marginBottom: 16,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => showModal()}
-            >
-              Add Product
-            </Button>
-            <Button icon={<FileExcelOutlined />} onClick={generatePDF}>
-              Generate Report
-            </Button>
-          </Space>
-          <Input
-            placeholder="Search by name or product ID"
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{ width: 300 }}
-            allowClear
-          />
-        </Space>
-
-        <Table
-          columns={columns}
-          dataSource={filteredProducts}
-          rowKey="id"
-          loading={loading}
-        />
-      </Card>
-
-      <Modal
-        title={editingProduct ? "Edit Product" : "Add Product"}
-        open={modalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please input the name!" }]}
+    <>
+      <Header>
+        <h3 style={{ color: "white" }}>Product Management</h3>
+      </Header>
+      <Content style={{ padding: "20px" }}>
+        <Card style={{ marginBottom: 16 }}>
+          <Space
+            style={{
+              marginBottom: 16,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[
-              { required: true, message: "Please input the description!" },
-            ]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-
-          <Form.Item
-            name="categoryId"
-            label="Category"
-            rules={[{ required: true, message: "Please select a category!" }]}
-          >
-            <Select>
-              {categories.map((category) => (
-                <Select.Option key={category.id} value={category.id}>
-                  {category.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="supplierId"
-            label="Supplier"
-            rules={[{ required: true, message: "Please select a supplier!" }]}
-          >
-            <Select>
-              {suppliers.map((supplier) => (
-                <Select.Option key={supplier.id} value={supplier.id}>
-                  {supplier.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="unitPrice"
-            label="Unit Price"
-            validateTrigger="onBlur"
-            rules={[
-              { required: true, message: "Please input the unit price!" },
-              () => ({
-                validator(_, value) {
-                  if (value === 0 || value === null || value === undefined) {
-                    return Promise.reject(new Error("Unit price must be greater than $0!"));
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-          >
-            <InputNumber
-              min={0} // Allows entering 0 but triggers validation
-              step={0.01}
-              formatter={(value) =>
-                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-
-
-          <Form.Item
-            name="quantity"
-            label="Quantity"
-            validateTrigger="onBlur"
-            rules={[
-              { required: true, message: "Please input the quantity!" },
-              () => ({
-                validator(_, value) {
-                  if (value === 0 || value === null || value === undefined) {
-                    return Promise.reject(new Error("Quantity must be greater than 0!"));
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-          >
-            <InputNumber
-              min={0} // Allows entering 0 but triggers validation
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-
-
-          <Form.Item>
             <Space>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                {editingProduct ? "Update" : "Create"}
-              </Button>
-              <Button onClick={handleCancel}>Cancel</Button>
               <Button
-                type="default"
-                onClick={() => {
-                  form.setFieldsValue({
-                    name: "Demo Product",
-                    description: "This is a sample product description.",
-                    categoryId: categories.length > 0 ? categories[0].id : undefined,
-                    supplierId: suppliers.length > 0 ? suppliers[0].id : undefined,
-                    unitPrice: 99.99,
-                    quantity: 10,
-                  });
-                }}
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => showModal()}
               >
-                Load Dummy Data
+                Add Product
+              </Button>
+              <Button icon={<FileExcelOutlined />} onClick={generatePDF}>
+                Generate Report
               </Button>
             </Space>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </Content>
+            <Input
+              placeholder="Search by name or product ID"
+              prefix={<SearchOutlined />}
+              value={searchText}
+              onChange={(e) => handleSearch(e.target.value)}
+              style={{ width: 300 }}
+              allowClear
+            />
+          </Space>
+
+          <Table
+            columns={columns}
+            dataSource={filteredProducts}
+            rowKey="id"
+            loading={loading}
+          />
+        </Card>
+
+        <Modal
+          title={editingProduct ? "Edit Product" : "Add Product"}
+          open={modalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[
+                { required: true, message: "Please input the name!" },
+                {
+                  pattern: /^[A-Za-z\s]+$/,
+                  message: "Name cannot contain digits or special characters!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[
+                { required: true, message: "Please input the description!" },
+              ]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+
+            <Form.Item
+              name="categoryId"
+              label="Category"
+              rules={[{ required: true, message: "Please select a category!" }]}
+            >
+              <Select>
+                {categories.map((category) => (
+                  <Select.Option key={category.id} value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="supplierId"
+              label="Supplier"
+              rules={[{ required: true, message: "Please select a supplier!" }]}
+            >
+              <Select>
+                {suppliers.map((supplier) => (
+                  <Select.Option key={supplier.id} value={supplier.id}>
+                    {supplier.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="unitPrice"
+              label="Unit Price"
+              validateTrigger="onBlur"
+              rules={[
+                { required: true, message: "Please input the unit price!" },
+                () => ({
+                  validator(_, value) {
+                    if (value === 0 || value === null || value === undefined) {
+                      return Promise.reject(
+                        new Error("Unit price must be greater than $0!")
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <InputNumber
+                min={0}
+                step={0.01}
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="quantity"
+              label="Quantity"
+              validateTrigger="onBlur"
+              rules={[
+                { required: true, message: "Please input the quantity!" },
+                () => ({
+                  validator(_, value) {
+                    if (value === 0 || value === null || value === undefined) {
+                      return Promise.reject(
+                        new Error("Quantity must be greater than 0!")
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <InputNumber
+                min={0}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Space>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  {editingProduct ? "Update" : "Create"}
+                </Button>
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button
+                  type="default"
+                  onClick={() => {
+                    form.setFieldsValue({
+                      name: "Demo Product",
+                      description: "This is a sample product description.",
+                      categoryId:
+                        categories.length > 0 ? categories[0].id : undefined,
+                      supplierId:
+                        suppliers.length > 0 ? suppliers[0].id : undefined,
+                      unitPrice: 99.99,
+                      quantity: 10,
+                    });
+                  }}
+                >
+                  Load Dummy Data
+                </Button>
+              </Space>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </Content>
     </>
   );
 };

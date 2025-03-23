@@ -12,7 +12,7 @@ import {
   Popconfirm,
   Card,
 } from "antd";
-import { Content } from "antd/es/layout/layout";
+import { Content, Header } from "antd/es/layout/layout";
 import {
   PlusOutlined,
   EditOutlined,
@@ -277,6 +277,10 @@ const UserManagement = () => {
   ];
 
   return (
+    <>
+    <Header>
+        <h3 style={{ color: "white" }}>User Management</h3>
+    </Header>
     <Content style={{ padding: "20px" }}>
       <Card style={{ marginBottom: 16 }}>
         <Space
@@ -326,7 +330,13 @@ const UserManagement = () => {
           <Form.Item
             name="name"
             label="Name"
-            rules={[{ required: true, message: "Please input the name!" }]}
+            rules={[
+              { required: true, message: "Please input the name!" },
+              {
+                pattern: /^[a-zA-Z\s]*$/,
+                message: "Name should contain only letters and spaces.",
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -346,9 +356,7 @@ const UserManagement = () => {
             <Form.Item
               name="password"
               label="Password"
-              rules={[
-                { required: true, message: "Please input the password!" },
-              ]}
+              rules={[{ required: true, message: "Please input the password!" }]}
             >
               <Input.Password />
             </Form.Item>
@@ -362,7 +370,17 @@ const UserManagement = () => {
             <Input />
           </Form.Item>
 
-          <Form.Item name="contactNumber" label="Contact Number">
+          <Form.Item
+            name="contactNumber"
+            label="Contact Number"
+            rules={[
+              { required: true, message: "Please input the contact number!" },
+              {
+                pattern: /^[0-9]{10}$/,
+                message: "Contact number must be 10 digits long.",
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
 
@@ -430,6 +448,7 @@ const UserManagement = () => {
         />
       </Modal>
     </Content>
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ import {
   Popconfirm,
   Card,
 } from "antd";
-import { Content } from "antd/es/layout/layout";
+import { Content, Header } from "antd/es/layout/layout";
 import {
   PlusOutlined,
   EditOutlined,
@@ -37,7 +37,6 @@ const SupplierManagement = () => {
     try {
       setLoading(true);
       const data = await supplierApi.getAll();
-      console.log(data);
       setSuppliers(data.data);
       setFilteredSuppliers(data.data);
     } catch (error) {
@@ -234,121 +233,136 @@ const SupplierManagement = () => {
   ];
 
   return (
-    <Content style={{ padding: "20px" }}>
-      <Card style={{ marginBottom: 16 }}>
-        <Space
-          style={{
-            marginBottom: 16,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => showModal()}
-            >
-              Add Supplier
-            </Button>
-            <Button icon={<FileExcelOutlined />} onClick={generatePDF}>
-              Generate Report
-            </Button>
-          </Space>
-          <Input
-            placeholder="Search by name, email, or NIC"
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{ width: 300 }}
-            allowClear
-          />
-        </Space>
-
-        <Table
-          columns={columns}
-          dataSource={filteredSuppliers}
-          rowKey="id"
-          loading={loading}
-        />
-      </Card>
-
-      <Modal
-        title={editingSupplier ? "Edit Supplier" : "Add Supplier"}
-        open={modalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please input the name!" }]}
+    <>
+      <Header>
+        <h3 style={{ color: "white" }}>Supplier Management</h3>
+      </Header>
+      <Content style={{ padding: "20px" }}>
+        <Card style={{ marginBottom: 16 }}>
+          <Space
+            style={{
+              marginBottom: 16,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: "Please input the email!" },
-              { type: "email", message: "Please enter a valid email!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="contactNumber"
-            label="Contact Number"
-            rules={[
-              { required: true, message: "Please input the contact number!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="address"
-            label="Address"
-            rules={[{ required: true, message: "Please input the address!" }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-
-          <Form.Item
-            name="nic"
-            label="NIC"
-            rules={[{ required: true, message: "Please input the NIC!" }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="businessRegisteredNumber"
-            label="Business Registration Number"
-            rules={[
-              {
-                required: true,
-                message: "Please input the business registration number!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item>
             <Space>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                {editingSupplier ? "Update" : "Create"}
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => showModal()}
+              >
+                Add Supplier
               </Button>
-              <Button onClick={handleCancel}>Cancel</Button>
+              <Button icon={<FileExcelOutlined />} onClick={generatePDF}>
+                Generate Report
+              </Button>
             </Space>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </Content>
+            <Input
+              placeholder="Search by name, email, or NIC"
+              prefix={<SearchOutlined />}
+              value={searchText}
+              onChange={(e) => handleSearch(e.target.value)}
+              style={{ width: 300 }}
+              allowClear
+            />
+          </Space>
+
+          <Table
+            columns={columns}
+            dataSource={filteredSuppliers}
+            rowKey="id"
+            loading={loading}
+          />
+        </Card>
+
+        <Modal
+          title={editingSupplier ? "Edit Supplier" : "Add Supplier"}
+          open={modalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[
+                { required: true, message: "Please input the name!" },
+                {
+                  pattern: /^[A-Za-z\s]+$/,
+                  message: "Name can only contain letters and spaces!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                { required: true, message: "Please input the email!" },
+                { type: "email", message: "Please enter a valid email!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="contactNumber"
+              label="Contact Number"
+              rules={[
+                { required: true, message: "Please input the contact number!" },
+                {
+                  pattern: /^[0-9]{10}$/,
+                  message: "Contact number must be exactly 10 digits!",
+                },
+              ]}
+            >
+              <Input maxLength={10} />
+            </Form.Item>
+
+            <Form.Item
+              name="address"
+              label="Address"
+              rules={[{ required: true, message: "Please input the address!" }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+
+            <Form.Item
+              name="nic"
+              label="NIC"
+              rules={[{ required: true, message: "Please input the NIC!" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              name="businessRegisteredNumber"
+              label="Business Registration Number"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input the business registration number!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item>
+              <Space>
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  {editingSupplier ? "Update" : "Create"}
+                </Button>
+                <Button onClick={handleCancel}>Cancel</Button>
+              </Space>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </Content>
+    </>
   );
 };
 

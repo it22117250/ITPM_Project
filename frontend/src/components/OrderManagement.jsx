@@ -15,7 +15,7 @@ import {
   Badge,
   Tag,
 } from "antd";
-import { Content } from "antd/es/layout/layout";
+import { Content, Header } from "antd/es/layout/layout";
 import {
   PlusOutlined,
   EditOutlined,
@@ -101,6 +101,7 @@ const OrderManagement = () => {
       console.error("Error searching products:", error);
     }
   };
+
   // Handle product selection
   const handleProductSelect = (value, option) => {
     const product = productSearchResults.find((p) => p.id === option.key);
@@ -342,6 +343,10 @@ const OrderManagement = () => {
   ];
 
   return (
+    <>
+    <Header>
+        <h3 style={{ color: "white" }}>Category Management</h3>
+    </Header>
     <Content style={{ padding: "20px" }}>
       <Card style={{ marginBottom: 16 }}>
         <Space
@@ -392,7 +397,13 @@ const OrderManagement = () => {
           <Form.Item
             name="customerName"
             label="Customer Name"
-            rules={[{ required: true, message: "Please input customer name!" }]}
+            rules={[
+              { required: true, message: "Please input customer name!" },
+              {
+                pattern: /^[A-Za-z\s]+$/, // Regex to validate only letters and spaces
+                message: "Customer name can only contain letters and spaces!",
+              },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -400,9 +411,7 @@ const OrderManagement = () => {
           <Form.Item
             name="shippingAddress"
             label="Shipping Address"
-            rules={[
-              { required: true, message: "Please input shipping address!" },
-            ]}
+            rules={[{ required: true, message: "Please input shipping address!" }]}
           >
             <Input.TextArea />
           </Form.Item>
@@ -410,8 +419,12 @@ const OrderManagement = () => {
           <Form.Item
             name="contactNumber"
             label="Contact Number"
-            rules={[
+            rules={[ 
               { required: true, message: "Please input contact number!" },
+              {
+                pattern: /^[0-9]{10}$/,  // Regex to validate 10-digit phone number
+                message: "Please enter a valid contact number (10 digits)!",
+              },
             ]}
           >
             <Input />
@@ -420,9 +433,7 @@ const OrderManagement = () => {
           <Form.Item
             name="paymentMethod"
             label="Payment Method"
-            rules={[
-              { required: true, message: "Please select payment method!" },
-            ]}
+            rules={[{ required: true, message: "Please select payment method!" }]}
           >
             <Select>
               <Option value="cash">Cash</Option>
@@ -434,9 +445,7 @@ const OrderManagement = () => {
             <Form.Item
               name="status"
               label="Order Status"
-              rules={[
-                { required: true, message: "Please select order status!" },
-              ]}
+              rules={[{ required: true, message: "Please select order status!" }]}
             >
               <Select>
                 <Option value="Pending">Pending</Option>
@@ -479,9 +488,7 @@ const OrderManagement = () => {
                     <InputNumber
                       min={1}
                       value={product.quantity}
-                      onChange={(value) =>
-                        updateProductQuantity(product.id, value)
-                      }
+                      onChange={(value) => updateProductQuantity(product.id, value)}
                     />
                     <Button
                       type="link"
@@ -523,6 +530,7 @@ const OrderManagement = () => {
         />
       </Modal>
     </Content>
+    </>
   );
 };
 

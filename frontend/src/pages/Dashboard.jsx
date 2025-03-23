@@ -69,6 +69,14 @@ const Dashboard = () => {
       },
     },
     {
+      key: "predicitions",
+      label: "Future Sales Management",
+      icon: <ShoppingOutlined />,
+      onClick: () => {
+        setActiveIndex(6);
+      },
+    },
+    {
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Logout",
@@ -210,7 +218,7 @@ const Dashboard = () => {
   }, [role]);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh", background: "radial-gradient(circle, #1897a6, #21243b)" }}>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -245,14 +253,26 @@ const Dashboard = () => {
         />
       </Sider>
       <Layout
-        style={{ marginLeft: collapsed ? 80 : 200, transition: "all 0.2s" }}
+        style={{
+          marginLeft: collapsed ? 80 : 200,
+          transition: "all 0.2s",
+          background: "radial-gradient(circle, #1897a6, #21243b)",
+        }}
       >
-        {activeIndex === 1 && <UserManagement />}
-        {activeIndex === 2 && <SupplierManagement />}
-        {activeIndex === 3 && <CategoryManagement />}
-        {activeIndex === 4 && <ProductManagement />}
-        {activeIndex === 5 && <OrderManagement />}
-        {activeIndex === 6 && <FutureSalesManagement />}
+        <div
+          style={{
+            padding: "20px",
+            background: "rgba(255, 255, 255, 0.3)",
+            borderRadius: "10px",
+          }}
+        >
+          {activeIndex === 1 && <UserManagement />}
+          {activeIndex === 2 && <SupplierManagement />}
+          {activeIndex === 3 && <CategoryManagement />}
+          {activeIndex === 4 && <ProductManagement />}
+          {activeIndex === 5 && <OrderManagement />}
+          {activeIndex === 6 && <FutureSalesManagement />}
+        </div>
       </Layout>
     </Layout>
   );
